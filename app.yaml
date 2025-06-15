@@ -1,0 +1,41 @@
+runtime: nodejs20
+
+instance_class: F1
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 1
+  target_cpu_utilization: 0.8
+  target_throughput_utilization: 0.8
+
+env_variables:
+  NODE_ENV: "production"
+  COINCAP_API_URL: "https://api.exchange.coinbase.com/products/BTC-USD/ticker"
+  POLLING_INTERVAL: 5000
+  DATA_SOURCE: "coinbase"
+  FIREBASE_DATA_PATH: "exchange/btcusdt/current"
+  # Firebase credentials will be received from Google Cloud Secret Manager
+
+readiness_check:
+  path: "/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/health"
+  check_interval_sec: 10
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+# Session affinity for websocket connections
+network:
+  session_affinity: true
+
+# Only allow HTTPS traffic
+handlers:
+- url: /.*
+  script: auto
+  secure: always 
