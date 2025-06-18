@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
+    "prepare-gcloud": "gcloud config set project epilot-bitcoin-sync-server",
     "deploy": "gcloud app deploy"
   },
   "engines": {
